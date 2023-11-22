@@ -1,0 +1,252 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Attachment {
+  id: String!
+  typeId: String!
+  type: AttachmentType!
+  description: String
+  key: String
+  url: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+"""The type is assigned"""
+enum AttachmentType {
+  PANELIST
+}
+
+type Role {
+  id: String!
+  role: UserRole!
+  createdAt: String!
+  updatedAt: String!
+}
+
+"""The user role assigned"""
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  SUPPLIER
+  MANAGER
+  CLIENT
+  PANELIST
+  MED_PANEL
+}
+
+type User {
+  id: String!
+  firstName: String
+  lastName: String
+  status: UserStatus!
+  emailVerified: Boolean!
+  email: String!
+  roles: [Role]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+"""The user status"""
+enum UserStatus {
+  DEACTIVATED
+  ACTIVE
+}
+
+type ResponsePayload {
+  status: Float
+  error: String
+  message: String
+  name: String
+}
+
+type AttachmentPayload {
+  response: ResponsePayload
+  attachment: Attachment
+}
+
+type AttachmentMediaPayload {
+  response: ResponsePayload
+  preSignedUrl: String
+}
+
+type PaginationPayload {
+  page: Int
+  limit: Int
+  totalCount: Int
+  totalPages: Int
+}
+
+type AttachmentsPayload {
+  response: ResponsePayload
+  attachments: [Attachment]
+  pagination: PaginationPayload
+}
+
+type UsersPayload {
+  users: [User]
+  pagination: PaginationPayload
+  response: ResponsePayload
+}
+
+type AccessUserPayload {
+  access_token: String
+  roles: [Role!]
+  response: ResponsePayload
+}
+
+type UserPayload {
+  user: User
+  response: ResponsePayload
+}
+
+type ForgotPasswordPayload {
+  response: ResponsePayload
+}
+
+type RolesPayload {
+  roles: [Role]
+  response: ResponsePayload
+}
+
+type Query {
+  getAttachments(getAttachment: GetAttachment!): AttachmentsPayload!
+  getAttachment(getMedia: GetMedia!): AttachmentMediaPayload!
+  fetchAllUsers(userInput: UsersInput!): UsersPayload!
+  fetchUser: UserPayload!
+  me: UserPayload!
+  fetchAllRoles: RolesPayload!
+  searchUser(searchUserInput: SearchUserInput!): UsersPayload!
+  getUser(getUser: GetUser!): UserPayload!
+}
+
+input GetAttachment {
+  typeId: String!
+}
+
+input GetMedia {
+  id: String
+}
+
+input UsersInput {
+  from: String
+  to: String
+  status: UserStatus
+  roles: [UserRole!]
+  searchQuery: String
+  paginationOptions: PaginationInput!
+}
+
+input PaginationInput {
+  page: Int!
+  limit: Int!
+}
+
+input SearchUserInput {
+  searchTerm: String!
+}
+
+input GetUser {
+  id: String!
+}
+
+type Mutation {
+  createAttachmentData(createAttachmentInput: CreateAttachmentInput!): AttachmentPayload!
+  removeAttachmentData(removeAttachment: RemoveAttachment!): AttachmentPayload!
+  updateAttachmentData(updateAttachmentInput: UpdateAttachmentInput!): AttachmentPayload!
+  login(loginUser: LoginUserInput!): AccessUserPayload!
+  registerUser(user: RegisterUserInput!): UserPayload!
+  forgotPassword(forgotPassword: ForgotPasswordInput!): ForgotPasswordPayload!
+  verifyEmail(verifyEmail: VerifyEmailInput!): UserPayload!
+  resendVerificationEmail(resendVerificationEmail: ResendVerificationEmail!): UserPayload!
+  verifyEmailAndSetPassword(verifyEmailAndSetPassword: VerifyUserAndUpdatePasswordInput!): UserPayload!
+  resetPassword(resetPassword: ResetPasswordInput!): UserPayload!
+  deactivateUser(user: UserIdInput!): UserPayload!
+  activateUser(user: UserIdInput!): UserPayload!
+  updateUser(user: UpdateUserInput!): UserPayload!
+  updateRole(user: UpdateRoleInput!): UserPayload!
+  updatePassword(updatePasswordInput: UpdatePasswordInput!): UserPayload!
+  removeUser(user: UserIdInput!): UserPayload!
+}
+
+input CreateAttachmentInput {
+  """enum type for module type - Upload Media"""
+  type: AttachmentType!
+  typeId: String!
+  description: String
+  url: String
+}
+
+input RemoveAttachment {
+  id: String
+}
+
+input UpdateAttachmentInput {
+  """enum type for module type - Upload Media"""
+  type: AttachmentType
+  typeId: String
+  description: String
+  url: String
+  id: String
+  key: String
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input RegisterUserInput {
+  firstName: String
+  lastName: String
+  password: String
+  email: String!
+
+  """Send Investor Type from the ENUM - Sign-up"""
+  roleType: UserRole!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+input ResendVerificationEmail {
+  email: String
+}
+
+input VerifyUserAndUpdatePasswordInput {
+  token: String!
+  password: String!
+}
+
+input ResetPasswordInput {
+  password: String!
+  token: String!
+}
+
+input UserIdInput {
+  userId: String!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  id: String!
+  emailVerified: Boolean
+}
+
+input UpdateRoleInput {
+  id: String!
+  roles: [UserRole!]!
+}
+
+input UpdatePasswordInput {
+  id: String!
+  newPassword: String!
+}
