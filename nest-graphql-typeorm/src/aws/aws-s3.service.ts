@@ -22,7 +22,7 @@ export class AwsS3Service {
    * @param file 
    * @returns file 
    */
-  async uploadFile(file: File, moduleName: string, typeId: string): Promise<ManagedUpload.SendData> {
+  async uploadFile(file: File, typeId: string): Promise<ManagedUpload.SendData> {
     try {
 
       const { originalname } = file;

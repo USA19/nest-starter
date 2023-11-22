@@ -5,17 +5,11 @@
 type Attachment {
   id: String!
   typeId: String!
-  type: AttachmentType!
   description: String
   key: String
   url: String
   createdAt: String!
   updatedAt: String!
-}
-
-"""The type is assigned"""
-enum AttachmentType {
-  PANELIST
 }
 
 type Role {
@@ -29,11 +23,6 @@ type Role {
 enum UserRole {
   SUPER_ADMIN
   ADMIN
-  SUPPLIER
-  MANAGER
-  CLIENT
-  PANELIST
-  MED_PANEL
 }
 
 type User {
@@ -171,8 +160,6 @@ type Mutation {
 }
 
 input CreateAttachmentInput {
-  """enum type for module type - Upload Media"""
-  type: AttachmentType!
   typeId: String!
   description: String
   url: String
@@ -183,8 +170,6 @@ input RemoveAttachment {
 }
 
 input UpdateAttachmentInput {
-  """enum type for module type - Upload Media"""
-  type: AttachmentType
   typeId: String
   description: String
   url: String

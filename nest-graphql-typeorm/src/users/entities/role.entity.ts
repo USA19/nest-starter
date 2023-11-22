@@ -12,12 +12,8 @@ import { User } from './user.entity';
 export enum UserRole {
   SUPER_ADMIN = 'super-admin',
   ADMIN = 'admin',
-  SUPPLIER = 'supplier',
-  MANAGER = 'manager',
-  CLIENT = 'client',
-  PANELIST = 'panelist',
-  MED_PANEL = 'med-panel'
 }
+
 registerEnumType(UserRole, {
   name: 'UserRole',
   description: 'The user role assigned',
@@ -33,7 +29,7 @@ export class Role {
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.PANELIST,
+    default: UserRole.ADMIN,
   })
   @Field((type) => UserRole)
   role: UserRole;

@@ -1,23 +1,11 @@
 import {
-  ManyToMany,
   Entity,
   Column,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
-import { ObjectType, Field, registerEnumType } from '@nestjs/graphql';
-
-
-export enum AttachmentType {
-  PANELIST = "panelist",
-}
-
-registerEnumType(AttachmentType, {
-  name: "AttachmentType",
-  description: "The type is assigned",
-});
-
+import { ObjectType, Field } from '@nestjs/graphql';
 @Entity({ name: 'Attachments' })
 @ObjectType()
 export class Attachment {
@@ -28,12 +16,6 @@ export class Attachment {
   @Column({ nullable: true })
   @Field()
   typeId: string;
-
-  @Column({
-    type: "enum", enum: AttachmentType, default: AttachmentType.PANELIST
-  })
-  @Field(type => AttachmentType)
-  type: AttachmentType;
 
   @Column({ nullable: true })
   @Field({ nullable: true })

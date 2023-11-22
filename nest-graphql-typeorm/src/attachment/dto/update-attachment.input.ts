@@ -12,7 +12,7 @@ export class UpdateAttachmentInput extends PartialType(CreateAttachmentInput) {
 }
 
 @InputType()
-export class UpdateAttachmentMediaInput extends PickType(CreateAttachmentInput, ['type', 'typeId'] as const) {
+export class UpdateAttachmentMediaInput extends PickType(CreateAttachmentInput, ['typeId'] as const) {
   @Field({ nullable: true })
   id?: string;
 }

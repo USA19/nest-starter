@@ -232,11 +232,10 @@ export class AttachmentsService {
    * @param uploadMedia 
    * @returns  
    */
-  async uploadMedia(attachments: File, { id, type, typeId }: UpdateAttachmentInput) {
-    const { Key, Location } = await this.awsService.uploadFile(attachments, type, typeId);
+  async uploadMedia(attachments: File, { id, typeId }: UpdateAttachmentInput) {
+    const { Key, Location } = await this.awsService.uploadFile(attachments, typeId);
     return {
       id,
-      type,
       typeId,
       key: Key,
       url: Location,

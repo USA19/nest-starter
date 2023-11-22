@@ -77,7 +77,7 @@ export class UsersService {
       userInstance.roles = [role];
       const user = await this.usersRepository.save(userInstance);
       // user is manager or admin then send this mail
-      if (roleType === UserRole.ADMIN || roleType === UserRole.MANAGER) {
+      if (roleType === UserRole.ADMIN) {
         await this.sendVerificationEmail(user, "setPassword");
       }
       return user;
@@ -284,24 +284,6 @@ export class UsersService {
    */
   async findAllUsers(ids: string[]): Promise<User[]> {
     return this.usersRepository.find({ where: { id: In([...ids]), status: UserStatus.ACTIVE } })
-  }
-
-  /**
-   * 
-   * @param roles 
-   * @returns boolean
-   */
-  isPanelist(roles: Role[]): boolean {
-    return !!(roles.find(({ role }) => role === UserRole.PANELIST));
-  }
-
-  /**
- * 
- * @param roles 
- * @returns boolean
- */
-  isMedPanelist(roles: Role[]): boolean {
-    return !!(roles.find(({ role }) => role === UserRole.MED_PANEL));
   }
 
   /**
