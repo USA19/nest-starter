@@ -1,21 +1,11 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  CreateDateColumn,
-  JoinTable,
-  ManyToMany,
-  BeforeInsert,
-  OneToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, JoinTable, ManyToMany, BeforeInsert } from 'typeorm';
 import { Role } from './role.entity';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum UserStatus {
   DEACTIVATED = 0,
   ACTIVE,
 }
-
 @Entity({ name: 'Users' })
 export class User {
   @BeforeInsert()
@@ -26,12 +16,15 @@ export class User {
   }
 
   @PrimaryGeneratedColumn('uuid')
+  @ApiProperty()
   id: string;
 
   @Column({ nullable: true })
+  @ApiProperty()
   firstName: string;
 
   @Column({ nullable: true })
+  @ApiProperty()
   lastName: string;
 
   @Column({
@@ -39,28 +32,36 @@ export class User {
     enum: UserStatus,
     default: UserStatus.DEACTIVATED,
   })
+  @ApiProperty({ enum: UserStatus, default: UserStatus.DEACTIVATED })
   status: UserStatus;
 
   @Column({ nullable: true, default: false })
+  @ApiPropertyOptional()
   emailVerified: boolean;
 
   @Column()
+  @ApiProperty()
   password: string;
 
   @Column({ unique: true })
+  @ApiProperty()
   email: string;
 
   @Column({ nullable: true, default: false })
+  @ApiPropertyOptional()
   token: string;
 
-  @ManyToMany((type) => Role, (role) => role.users, { eager: true })
+  @ManyToMany(() => Role, (role) => role.users, { eager: true })
+  @ApiProperty({ type: [Role] })
   @JoinTable({ name: 'UserRoles' })
   roles: Role[];
 
   @CreateDateColumn({ type: 'timestamptz' })
+  @ApiProperty()
   createdAt: string;
 
   @UpdateDateColumn({ type: 'timestamptz' })
+  @ApiProperty()
   updatedAt: string;
 
   public get fullName(): string {

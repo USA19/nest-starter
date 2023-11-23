@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException, PreconditionFailedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { File } from 'src/aws/dto/file-input.dto';
+import { File } from '../aws/dto/file-input.dto';
 import { UtilsService } from 'src/util/utils.service';
 import { Repository } from 'typeorm';
 import { AwsS3Service } from '../aws/aws-s3.service';
@@ -39,9 +39,9 @@ export class AttachmentsService {
   async uploadAttachment(file: File, updateAttachmentMediaInput: UpdateAttachmentMediaInput) {
     const attachment = await this.createAttachment(updateAttachmentMediaInput)
     updateAttachmentMediaInput.id = attachment.id
-    const attachments = await this.uploadMedia(file, updateAttachmentMediaInput)
+    const attachments = await this.uploadMedia(file, updateAttachmentMediaInput, attachment.id)
 
-    await this.updateAttachmentMedia(attachments)
+    await this.updateAttachmentMedia(attachments, attachment.id)
     if (attachments.url) {
       return attachments
     }
@@ -65,10 +65,10 @@ export class AttachmentsService {
       const deletedRemoteFile = await this.awsService.removeFile(existingAttachment.key);
 
       if (deletedRemoteFile) {
-        const attachments = await this.uploadMedia(file, updateAttachmentMediaInput);
+        const attachments = await this.uploadMedia(file, updateAttachmentMediaInput, id);
 
         if (attachments.url) {
-          return await this.updateAttachmentMedia(attachments)
+          return await this.updateAttachmentMedia(attachments, id)
         }
 
         throw new PreconditionFailedException({
@@ -116,9 +116,9 @@ export class AttachmentsService {
    * @param updateAttachmentInput 
    * @returns attachment media 
    */
-  async updateAttachmentMedia(updateAttachmentInput: UpdateAttachmentInput): Promise<Attachment> {
+  async updateAttachmentMedia(updateAttachmentInput: UpdateAttachmentInput, id: string): Promise<Attachment> {
     try {
-      return await this.utilsService.updateEntityManager(Attachment, updateAttachmentInput.id, updateAttachmentInput, this.attachmentsRepository)
+      return await this.utilsService.updateEntityManager(Attachment, id, updateAttachmentInput, this.attachmentsRepository)
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -204,9 +204,9 @@ export class AttachmentsService {
    * @param updateAttachmentInput 
    * @returns  
    */
-  async updateAttachmentData(updateAttachmentInput: UpdateAttachmentInput): Promise<Attachment> {
+  async updateAttachmentData(updateAttachmentInput: UpdateAttachmentInput, id: string): Promise<Attachment> {
     try {
-      return await this.updateAttachmentMedia(updateAttachmentInput);
+      return await this.updateAttachmentMedia(updateAttachmentInput, id);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
@@ -232,10 +232,10 @@ export class AttachmentsService {
    * @param uploadMedia 
    * @returns  
    */
-  async uploadMedia(attachments: File, { id, typeId }: UpdateAttachmentInput) {
+  async uploadMedia(attachments: File, { typeId }: UpdateAttachmentInput, attachmentId: string) {
     const { Key, Location } = await this.awsService.uploadFile(attachments, typeId);
     return {
-      id,
+      id: attachmentId,
       typeId,
       key: Key,
       url: Location,

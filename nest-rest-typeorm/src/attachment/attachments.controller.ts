@@ -1,28 +1,24 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, SetMetadata, UseGuards } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, SetMetadata, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { fileFilter, } from '../lib/helper';
 import { AttachmentsService } from './attachments.service';
 import { JwtAuthRestFulGuard } from '../users/auth/jwt-auth-restful.guard';
 import RestfulRoleGuard from '../users/auth/roleRestful.guard';
-import { GetAttachment, GetMedia, RemoveAttachment, UpdateAttachmentInput } from './dto/update-attachment.input';
+import { UpdateAttachmentInput, UpdateAttachmentMediaInput } from './dto/update-attachment.input';
 import { AttachmentPayload, AttachmentsPayload } from './dto/attachments-payload.dto';
 import { CreateAttachmentInput } from './dto/create-attachment.dto';
 import { GetAttachmentPayload } from './dto/get-attachment-url-payload';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { File } from '../aws/dto/file-input.dto';
 
 @ApiTags('Attachments')
 @Controller('attachments')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) { }
 
+  @ApiBearerAuth()
   @Get('/:typeId')
-  @ApiParam({
-    type: GetAttachment,
-    required: true,
-    name: 'GetAttachmentParam'
-  })
-  @ApiResponse({
-    status: 200,
-    type: AttachmentsPayload,
-  })
+  @ApiResponse({ status: 200, type: AttachmentsPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
   async getAttachments(@Param('typeId') typeId: string): Promise<AttachmentsPayload> {
@@ -33,7 +29,8 @@ export class AttachmentsController {
     };
   }
 
-  @Post('/data')
+  @ApiBearerAuth()
+  @Post('data')
   @ApiResponse({ status: 200, type: AttachmentPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -45,12 +42,8 @@ export class AttachmentsController {
     };
   }
 
+  @ApiBearerAuth()
   @Delete('/data/:id')
-  @ApiParam({
-    type: RemoveAttachment,
-    required: true,
-    name: 'RemoveAttachmentParam'
-  })
   @ApiResponse({ status: 200, type: AttachmentPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -61,27 +54,21 @@ export class AttachmentsController {
     };
   }
 
+  @ApiBearerAuth()
   @Put('/:id')
-  @ApiParam({
-    type: UpdateAttachmentInput,
-    name: 'UpdateAttachmentParam'
-  })
   @ApiResponse({ status: 200, type: AttachmentPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
   async updateAttachmentData(@Param('id') id: string, @Body() updateAttachmentInput: UpdateAttachmentInput): Promise<AttachmentPayload> {
-    const attachment = await this.attachmentsService.updateAttachmentData({ ...updateAttachmentInput, id });
+    const attachment = await this.attachmentsService.updateAttachmentData(updateAttachmentInput, id);
     return {
       attachment,
       response: { status: 200, message: 'Attachment data updated successfully' }
     };
   }
 
+  @ApiBearerAuth()
   @Get('url/:id')
-  @ApiParam({
-    type: GetMedia,
-    name: 'GetMediaParam'
-  })
   @ApiResponse({ status: 200, type: GetAttachmentPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -92,4 +79,25 @@ export class AttachmentsController {
       response: { status: 200, message: 'Attachment presigned url fetched successfully' }
     };
   }
+
+  // Just Example how image upload would work
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Post('upload/:attachmentId')
+  // @ApiConsumes("multipart/form-data")
+  // @ApiBody({
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       file: {
+  //         type: 'string',
+  //         format: 'binary',
+  //       },
+  //     },
+  //   },
+  // })
+
+  // @UseInterceptors(FileInterceptor('file', { fileFilter }))
+  // async uploadMedia(@Param("attachmentId") attachmentId: string, @UploadedFile() file: File, @Body() updateAttachmentMediaInput: UpdateAttachmentMediaInput) {
+  //   return await this.attachmentsService.uploadMedia(file, updateAttachmentMediaInput, attachmentId)
+  // }
 }

@@ -175,8 +175,7 @@ export class UsersService {
    */
   async findAll(usersInput: UsersInput): Promise<UsersPayload> {
     try {
-      const { paginationOptions, from, roles, status, to, searchQuery } = usersInput;
-      const { limit, page } = paginationOptions;
+      const { limit, page, from, roles, status, to, searchQuery } = usersInput;
 
       const query = this.usersRepository.createQueryBuilder('user')
         .leftJoinAndSelect('user.roles', 'roles')

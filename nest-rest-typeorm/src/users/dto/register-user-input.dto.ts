@@ -18,6 +18,6 @@ export class RegisterUserInput {
   @Transform(({ value }) => value.toString()?.trim()?.toLowerCase())
   email: string;
 
-  @ApiPropertyOptional({ type: UserRole, default: UserRole.ADMIN })
+  @ApiPropertyOptional({ enum: UserRole, default: UserRole.ADMIN })
   roleType: UserRole;
 }

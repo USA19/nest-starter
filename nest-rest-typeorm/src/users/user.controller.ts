@@ -1,6 +1,6 @@
 
 import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Post, Put, Query, Request, SetMetadata, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
-import { ApiResponse, ApiTags, ApiQuery, ApiParam } from "@nestjs/swagger";
+import { ApiResponse, ApiTags, ApiQuery, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { UsersPayload } from "./dto/users-payload.dto";
 import { JwtAuthRestFulGuard } from "./auth/jwt-auth-restful.guard";
@@ -30,7 +30,7 @@ export class UserController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  @ApiQuery({ type: UsersInput, required: true, name: 'UsersInput' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, type: UsersPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -39,6 +39,7 @@ export class UserController {
   }
 
   @Get('me')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, type: UserPayload })
   @UseGuards(JwtAuthRestFulGuard)
   async me(@CurrentUser() currentUser: CurrentUserInterface): Promise<UserPayload> {
@@ -55,6 +56,7 @@ export class UserController {
   }
 
   @Get('roles')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, type: RolesPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -74,7 +76,7 @@ export class UserController {
   }
 
   @Get('search')
-  @ApiQuery({ type: SearchUserInput, required: true, name: 'SearchUserInput' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, type: UsersPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -86,7 +88,6 @@ export class UserController {
   }
 
   @Get('/:id')
-  @ApiParam({ type: GetUser, required: true, name: 'GetUserParam' })
   @ApiResponse({ status: 200, type: UserPayload })
   @UseGuards(JwtAuthRestFulGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])

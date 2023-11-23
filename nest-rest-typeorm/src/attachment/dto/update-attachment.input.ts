@@ -4,9 +4,6 @@ import PaginationInput from 'src/users/dto/pagination-input.dto';
 
 export class UpdateAttachmentInput extends PartialType(CreateAttachmentInput) {
   @ApiPropertyOptional()
-  id?: string;
-
-  @ApiPropertyOptional()
   key?: string;
 }
 
@@ -15,7 +12,10 @@ export class UpdateAttachmentMediaInput extends PickType(CreateAttachmentInput, 
   id?: string;
 }
 
-export class GetMedia extends PickType(UpdateAttachmentInput, ['id'] as const) { }
+export class GetMedia {
+  @ApiPropertyOptional()
+  id: string;
+}
 
 
 export class GetAttachment {
@@ -28,4 +28,4 @@ export default class AttachmentInput {
   paginationOptions: PaginationInput
 }
 
-export class RemoveAttachment extends PickType(UpdateAttachmentInput, ['id'] as const) { }
+export class RemoveAttachment extends GetMedia { }
