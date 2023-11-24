@@ -5,12 +5,13 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { join } from 'path';
 import { urlencoded, json } from 'express';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '../../', 'static'));
   app.enableCors();
-
+  app.useGlobalPipes(new ValidationPipe({ stopAtFirstError: true, transform: true, transformOptions: { enableImplicitConversion: true } }));
   // to prevent everyone from accessing the api docs
   app.use("/docs*",
     basicAuth({

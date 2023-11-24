@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, ForbiddenException, HttpStatus, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, ForbiddenException, HttpStatus, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { User, UserStatus } from './entities/user.entity';
 import { Repository, Not, In, QueryRunner, Brackets } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -73,6 +73,10 @@ export class UsersService {
       const role = await this.rolesRepository.findOne({
         where: { role: roleType },
       });
+
+      if (!role) {
+        throw new BadRequestException(`Role Does'nt exist`)
+      }
 
       userInstance.roles = [role];
       const user = await this.usersRepository.save(userInstance);
@@ -190,7 +194,7 @@ export class UsersService {
           }
 
           if (roles?.length) {
-            qb.andWhere('role.role IN (:...roles)', { roles })
+            qb.andWhere('roles.role IN (:...roles)', { roles })
           }
 
           if (status != null) {

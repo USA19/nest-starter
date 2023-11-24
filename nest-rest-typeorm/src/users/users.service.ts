@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, ForbiddenException, HttpStatus, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, ForbiddenException, HttpStatus, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { User, UserStatus } from './entities/user.entity';
 import { Repository, Not, In, QueryRunner, Brackets } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -57,10 +57,7 @@ export class UsersService {
 
       const existingUser = await this.findOne(email, true);
       if (existingUser) {
-        throw new ConflictException({
-          status: HttpStatus.CONFLICT,
-          error: 'User already exists',
-        });
+        throw new ConflictException('User already exists');
       }
 
       registerUserInput.password = registerUserInput.password || generate({ length: 10, numbers: true });
@@ -74,12 +71,16 @@ export class UsersService {
         where: { role: roleType },
       });
 
+      if (!role) {
+        throw new BadRequestException(`Role Does'nt exist`)
+      }
+
       userInstance.roles = [role];
       const user = await this.usersRepository.save(userInstance);
       // user is manager or admin then send this mail
-      if (roleType === UserRole.ADMIN) {
-        await this.sendVerificationEmail(user, "setPassword");
-      }
+      // if (roleType === UserRole.ADMIN) {
+      //   await this.sendVerificationEmail(user, "setPassword");
+      // }
       return user;
     } catch (error) {
       throw new InternalServerErrorException(error);
@@ -189,7 +190,7 @@ export class UsersService {
           }
 
           if (roles?.length) {
-            qb.andWhere('role.role IN (:...roles)', { roles })
+            qb.andWhere('roles.role IN (:...roles)', { roles })
           }
 
           if (status != null) {
@@ -226,6 +227,7 @@ export class UsersService {
         },
       };
     } catch (error) {
+      console.log(error, ">>>>>>>>>>>>>>")
       throw new InternalServerErrorException(error);
     }
   }

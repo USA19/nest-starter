@@ -1,6 +1,6 @@
 
-import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Post, Put, Query, Request, SetMetadata, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
-import { ApiResponse, ApiTags, ApiQuery, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
+import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Post, Put, Query, SetMetadata, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
+import { ApiResponse, ApiTags, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { UsersPayload } from "./dto/users-payload.dto";
 import { JwtAuthRestFulGuard } from "./auth/jwt-auth-restful.guard";
@@ -34,7 +34,7 @@ export class UserController {
   @ApiResponse({ status: 200, type: UsersPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
-  async fetchAllUsers(@Query('userInput') usersInput: UsersInput): Promise<UsersPayload> {
+  async fetchAllUsers(@Query(ValidationPipe) usersInput: UsersInput): Promise<UsersPayload> {
     return await this.usersService.findAll(usersInput);
   }
 
@@ -80,7 +80,7 @@ export class UserController {
   @ApiResponse({ status: 200, type: UsersPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
-  async searchUser(@Query('searchUserInput') searchUserInput: SearchUserInput): Promise<UsersPayload> {
+  async searchUser(@Query(ValidationPipe) searchUserInput: SearchUserInput): Promise<UsersPayload> {
     return {
       users: await this.usersService.search(searchUserInput),
       response: { status: 200, message: 'User Data fetched successfully' },

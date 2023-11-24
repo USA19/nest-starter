@@ -1,15 +1,12 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, SetMetadata, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { fileFilter, } from '../lib/helper';
+import { Body, Controller, Delete, Get, Param, Post, Put, SetMetadata, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AttachmentsService } from './attachments.service';
 import { JwtAuthRestFulGuard } from '../users/auth/jwt-auth-restful.guard';
 import RestfulRoleGuard from '../users/auth/roleRestful.guard';
-import { UpdateAttachmentInput, UpdateAttachmentMediaInput } from './dto/update-attachment.input';
+import { UpdateAttachmentInput } from './dto/update-attachment.input';
 import { AttachmentPayload, AttachmentsPayload } from './dto/attachments-payload.dto';
 import { CreateAttachmentInput } from './dto/create-attachment.dto';
 import { GetAttachmentPayload } from './dto/get-attachment-url-payload';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { File } from '../aws/dto/file-input.dto';
 
 @ApiTags('Attachments')
 @Controller('attachments')
