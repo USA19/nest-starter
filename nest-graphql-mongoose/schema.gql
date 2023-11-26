@@ -1,0 +1,189 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Role {
+  _id: String!
+  role: UserRole!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""The user role assigned"""
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type User {
+  _id: String!
+  firstName: String
+  lastName: String
+  status: UserStatus!
+  emailVerified: Boolean!
+  email: String!
+  roleIds: [Role]!
+  roles: [Role!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""The user status"""
+enum UserStatus {
+  DEACTIVATED
+  ACTIVE
+}
+
+type ResponsePayload {
+  status: Float
+  error: String
+  message: String
+  name: String
+}
+
+type PaginationPayload {
+  page: Int
+  limit: Int
+  totalCount: Int
+  totalPages: Int
+}
+
+type UsersPayload {
+  users: [User]
+  pagination: PaginationPayload
+  response: ResponsePayload
+}
+
+type AccessUserPayload {
+  access_token: String
+  roles: [Role!]
+  response: ResponsePayload
+}
+
+type UserPayload {
+  user: User
+  response: ResponsePayload
+}
+
+type ForgotPasswordPayload {
+  response: ResponsePayload
+}
+
+type RolesPayload {
+  roles: [Role]
+  response: ResponsePayload
+}
+
+type Query {
+  fetchAllUsers(userInput: UsersInput!): UsersPayload!
+  fetchUser: UserPayload!
+  me: UserPayload!
+  fetchAllRoles: RolesPayload!
+  searchUser(searchUserInput: SearchUserInput!): UsersPayload!
+  getUser(getUser: GetUser!): UserPayload!
+}
+
+input UsersInput {
+  """YYYY-MM-DDTHH:mm:ss.sssZ i.e.2023-11-25T08:30:00.000Z"""
+  from: String
+
+  """YYYY-MM-DDTHH:mm:ss.sssZ i.e.2023-11-25T08:30:00.000Z"""
+  to: String
+  status: UserStatus
+  roles: [String!]
+  searchQuery: String
+  paginationOptions: PaginationInput!
+}
+
+input PaginationInput {
+  page: Int!
+  limit: Int!
+}
+
+input SearchUserInput {
+  searchTerm: String!
+}
+
+input GetUser {
+  id: String!
+}
+
+type Mutation {
+  login(loginUser: LoginUserInput!): AccessUserPayload!
+  registerUser(user: RegisterUserInput!): UserPayload!
+  forgotPassword(forgotPassword: ForgotPasswordInput!): ForgotPasswordPayload!
+  verifyEmail(verifyEmail: VerifyEmailInput!): UserPayload!
+  resendVerificationEmail(resendVerificationEmail: ResendVerificationEmail!): UserPayload!
+  verifyEmailAndSetPassword(verifyEmailAndSetPassword: VerifyUserAndUpdatePasswordInput!): UserPayload!
+  resetPassword(resetPassword: ResetPasswordInput!): UserPayload!
+  deactivateUser(user: UserIdInput!): UserPayload!
+  activateUser(user: UserIdInput!): UserPayload!
+  updateUser(user: UpdateUserInput!): UserPayload!
+  updateRole(user: UpdateRoleInput!): UserPayload!
+  updatePassword(updatePasswordInput: UpdatePasswordInput!): UserPayload!
+  removeUser(user: UserIdInput!): UserPayload!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+input RegisterUserInput {
+  firstName: String
+  lastName: String
+  password: String
+  email: String!
+
+  """Send Investor Type from the ENUM - Sign-up"""
+  roleType: UserRole!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input VerifyEmailInput {
+  token: String!
+}
+
+input ResendVerificationEmail {
+  email: String
+}
+
+input VerifyUserAndUpdatePasswordInput {
+  token: String!
+  password: String!
+}
+
+input ResetPasswordInput {
+  password: String!
+  token: String!
+}
+
+input UserIdInput {
+  userId: String!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  id: String!
+  emailVerified: Boolean
+}
+
+input UpdateRoleInput {
+  id: String!
+  roles: [UserRole!]!
+}
+
+input UpdatePasswordInput {
+  id: String!
+  newPassword: String!
+}
