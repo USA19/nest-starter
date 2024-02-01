@@ -1,4 +1,3 @@
-import { AttachmentsController } from './attachment/attachments.controller';
 import { AttachmentModule } from './attachment/attachment.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -27,7 +26,7 @@ import { UtilsModule } from './util/utils.module';
       useClass: DatabaseConfig,
     }),
   ],
-  controllers: [AttachmentsController],
+  controllers: [AppController],
   providers: [AppService],
 })
 

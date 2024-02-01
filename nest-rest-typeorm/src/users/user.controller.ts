@@ -96,6 +96,7 @@ export class UserController {
   }
 
   @Post('login')
+  @ApiResponse({ status: 200, description: 'User found', type: AccessUserPayload })
   @UsePipes(new ValidationPipe({ transform: true }))  //for transform to work
   async login(@Body() loginUserInput: LoginUserInput): Promise<AccessUserPayload> {
     const { email, password } = loginUserInput;
@@ -113,6 +114,7 @@ export class UserController {
   }
 
   @Post('register')
+  @ApiResponse({ status: 200, type: UserPayload })
   @UsePipes(new ValidationPipe({ transform: true }))
   async registerUser(@Body() registerUserInput: RegisterUserInput): Promise<UserPayload> {
     return {

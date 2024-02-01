@@ -320,30 +320,21 @@ export class UsersService {
    */
   async createToken(user: User, paramPass: string): Promise<AccessUserPayload> {
     const passwordMatch = await bcrypt.compare(paramPass, user.password);
-    if (passwordMatch) {
-      const payload = { email: user.email, sub: user.id };
-      return {
-        access_token: this.jwtService.sign(payload),
-        roles: user.roles,
-        response: {
-          message: 'OK',
-          status: 200,
-          name: 'Token Created',
-        },
-      };
-    } else {
-      return {
-        response: {
-          message: 'Incorrect Email or Password',
-          status: 404,
-          name: 'Email or Password invalid',
-        },
-        access_token: null,
-        roles: [],
-      };
+
+    if (!passwordMatch) {
+      throw new BadRequestException('Incorrect Email or Password')
+    };
+
+    return {
+      access_token: this.jwtService.sign({ email: user.email, sub: user.id }),
+      roles: user.roles,
+      response: {
+        message: 'OK',
+        status: 200,
+        name: 'Token Created',
+      },
     }
   }
-
   /**
    * Validates user
    * @param email
