@@ -33,7 +33,7 @@ export class User extends Document {
   @ApiProperty()
   emailVerified: boolean;
 
-  @Prop()
+  @Prop({ select: false })
   password: string;
 
   @Prop({ unique: true, lowercase: true })

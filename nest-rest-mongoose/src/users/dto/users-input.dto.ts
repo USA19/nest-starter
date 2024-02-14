@@ -25,7 +25,7 @@ export default class UsersInput {
       enum: [UserRole],
     },
     description: 'Array of user roles',
-    example: [UserRole.ADMIN, UserRole.ADMIN],
+    example: [UserRole.ADMIN],
   })
   @IsOptional()
   @IsArray()

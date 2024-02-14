@@ -39,8 +39,7 @@ export class User {
   @ApiPropertyOptional()
   emailVerified: boolean;
 
-  @Column()
-  @ApiProperty()
+  @Column({ select: false })
   password: string;
 
   @Column({ unique: true })

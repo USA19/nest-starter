@@ -88,6 +88,7 @@ export class UserController {
   }
 
   @Get('/:id')
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, type: UserPayload })
   @UseGuards(JwtAuthRestFulGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
