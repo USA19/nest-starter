@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn, JoinTable, ManyToMany, BeforeInsert } from 'typeorm';
 import { Role } from './role.entity';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export enum UserStatus {
   DEACTIVATED = 0,
@@ -39,7 +40,8 @@ export class User {
   @ApiPropertyOptional()
   emailVerified: boolean;
 
-  @Column({ select: false })
+  @Column()
+  @Exclude()
   password: string;
 
   @Column({ unique: true })

@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as mongooseSchema } from 'mongoose';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Role } from './role.entity';
+import { Exclude } from 'class-transformer';
 
 export enum UserStatus {
   DEACTIVATED = "0",
@@ -33,7 +34,8 @@ export class User extends Document {
   @ApiProperty()
   emailVerified: boolean;
 
-  @Prop({ select: false })
+  @Exclude()
+  @Prop()
   password: string;
 
   @Prop({ unique: true, lowercase: true })

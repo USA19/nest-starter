@@ -1,5 +1,5 @@
 
-import { Body, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Post, Put, Query, SetMetadata, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common"
+import { Body, ClassSerializerInterceptor, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Post, Put, Query, SetMetadata, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common"
 import { ApiResponse, ApiTags, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { UsersPayload } from "./dto/users-payload.dto";
@@ -26,6 +26,7 @@ import { UpdatePasswordInput } from "./dto/update-password-input";
 
 @ApiTags('Users')
 @Controller('users')
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly usersService: UsersService) { }
 
