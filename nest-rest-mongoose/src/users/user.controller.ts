@@ -1,6 +1,6 @@
 
 import { Body, ClassSerializerInterceptor, Controller, Delete, ForbiddenException, Get, NotFoundException, Param, Post, Put, Query, SetMetadata, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from "@nestjs/common"
-import { ApiResponse, ApiTags, ApiParam, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiResponse, ApiTags, ApiBearerAuth } from "@nestjs/swagger";
 import { UsersService } from "./users.service";
 import { UsersPayload } from "./dto/users-payload.dto";
 import { JwtAuthRestFulGuard } from "./auth/jwt-auth-restful.guard";
@@ -11,7 +11,7 @@ import { CurrentUserInterface } from "./auth/dto/current-user.dto";
 import { CurrentUser } from "src/customDecorators/current-user.decorator";
 import RolesPayload from "./dto/roles-payload.dto";
 import { SearchUserInput } from "./dto/search-user.input";
-import { GetUser, ResendVerificationEmail, UpdateUserInput } from "./dto/update-user-input.dto";
+import {ResendVerificationEmail, UpdateUserInput } from "./dto/update-user-input.dto";
 import { LoginUserInput } from "./dto/login-user-input.dto";
 import { AccessUserPayload } from "./dto/access-user.dto";
 import { RegisterUserInput } from "./dto/register-user-input.dto";
@@ -234,7 +234,6 @@ export class UserController {
   }
 
   @Put('update/:id')
-  @ApiParam({ type: GetUser, required: true, name: 'UpdateUserParams' })
   @ApiResponse({ status: 200, type: UserPayload })
   async updateUser(@Param('id') id: string, @Body() updateUserInput: UpdateUserInput): Promise<UserPayload> {
     const user = await this.usersService.update({ ...updateUserInput, id });
@@ -246,7 +245,6 @@ export class UserController {
 
 
   @Put('updateRole/:id')
-  @ApiParam({ type: GetUser, required: true, name: 'UpdateRoleParams' })
   @ApiResponse({ status: 200, type: UserPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
@@ -260,7 +258,6 @@ export class UserController {
   }
 
   @Put('updatePassword/:id')
-  @ApiParam({ type: GetUser, required: true, name: 'UpdatePasswordParams' })
   @ApiResponse({ status: 200, type: UserPayload })
   async updatePassword(@Param('id') id: string, @Body() updatePasswordInput: UpdatePasswordInput): Promise<UserPayload> {
     const user = await this.usersService.setNewPassword({ ...updatePasswordInput, id });
@@ -279,7 +276,6 @@ export class UserController {
   }
 
   @Delete('/:id')
-  @ApiParam({ type: GetUser, required: true, name: 'DeleteUserParams' })
   @ApiResponse({ status: 200, type: UserPayload })
   @UseGuards(JwtAuthRestFulGuard, RestfulRoleGuard)
   @SetMetadata('roles', ['admin', 'super-admin'])
