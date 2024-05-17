@@ -44,7 +44,12 @@ Open [http://localhost:3000/graphql](http://localhost:3000/graphql) with your br
 You can also run the database and redis services using Docker.
 
 ```bash
-sudo docker-compose up --build
+docker-compose up --build
+```
+To stop and remove containers created by docker-compose, you can use the following command:
+
+```bash
+docker-compose down
 ```
 
 ## Development Guidlines

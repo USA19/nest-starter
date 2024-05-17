@@ -18,7 +18,7 @@ Starter App for `Nest.js`, where the `User` and `Auth` Modules are already added
 
 ## Before you start
 
-Make a copy of `.env.example` file as `.env` and add environment variables accordingly.
+Make a copy of `.env.example` file as `.env` and add environment variables accordingly and also create the database.
 
 That's it.
 
@@ -38,6 +38,19 @@ npm run start:dev
 
 Open [http://localhost:3000/docs](http://localhost:3000/docs) with your browser to see the api docs.
 
+## Running with Docker
+
+You can also run the database and redis services using Docker.
+
+```bash
+docker-compose up --build
+```
+To stop and remove containers created by docker-compose, you can use the following command:
+
+```bash
+docker-compose down
+```
+
 ## Development Guidlines
 
 - Update the User and Role Entities and then change the DTO's in `src/users/dto` accordingly.
@@ -47,18 +60,18 @@ Open [http://localhost:3000/docs](http://localhost:3000/docs) with your browser 
 ### To run migration please type
 
 ```bash
-npm run typeorm:generate --name=MigrationName 
+npm run typeorm:generate --name=MigrationName
 ```
 
-- Now update user and role seeders data `src/users/seeds/seed-data.ts` according to your entity type and then run the following command 
+- Now update user and role seeders data `src/users/seeds/seed-data.ts` according to your entity type and then run the following command
 
 ### Data Seeding
+
 To seed data for local development, seeders logic is located in `seeders/module-name.seeder.ts`
 
 ```bash
 npm run seeds
 ```
-
 
 ### NOTE
 
@@ -69,9 +82,11 @@ I have added the auth and user modules as one module to avoid circular-dependenc
 You need to import user module in every other module to be able to add authentication and authorization in that module.
 
 ### Change Authorization in User Controller
+
 As you start there are only two roles in the app, which is why you might need to change the authorization rule defined in the user controller
 
 ## Troubleshoot
+
 - Incase you encounter a circular dependency error, then use `forwardRef` to get rid of that error, you can read more about `circular-dependency` and `forwardRef` [here](https://docs.nestjs.com/fundamentals/circular-dependency).
 
 Enjoy Coding!

@@ -43,7 +43,12 @@ Open [http://localhost:3000/docs](http://localhost:3000/docs) to see the swegger
 You can also run the database and redis services using Docker.
 
 ```bash
-sudo docker-compose up --build
+docker-compose up --build
+```
+To stop and remove containers created by docker-compose, you can use the following command:
+
+```bash
+docker-compose down
 ```
 
 ## Development Guidlines
