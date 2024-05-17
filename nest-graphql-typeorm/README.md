@@ -1,4 +1,4 @@
-# Nest.js Typeorm Rest API's Starter App
+# Nest.js Typeorm Graphql Starter App
 
 Starter App for `Nest.js`, where the `User` and `Auth` Modules are already added along with `AWS` services such as `S3` and `SES`. `Twilio` and `Redis` integration is already in place.
 
@@ -39,6 +39,13 @@ npm run start:dev
 
 Open [http://localhost:3000/graphql](http://localhost:3000/graphql) with your browser to see the graphql studio where all the queries and mutations can be seen.
 
+## Running with Docker
+
+You can also run the database and redis services using Docker.
+
+```bash
+sudo docker-compose up --build
+```
 ## Development Guidlines
 
 - Update the User and Role Entities and then change the DTO's in `src/users/dto` accordingly.
