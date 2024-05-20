@@ -6,22 +6,22 @@ Starter App for `Nest.js`, where the `User` and `Auth` Modules are already added
 
 - JWT Authentication
 - Passport.js
-- Graphql
+- Roles Authorization
 - Apollo Graphql
 - Twilio
 - Mongoose
 - Database Seeding using nestjs-command package
 - Mongodb
 - Class Validator package for input validation
-- AWS ( S3 and SES )
-- Redis
 - Class-Transform
+- AWS S3
+- AWS SES (Simple Email Service)
+- Redis
 
 ## Before you start
 
-Make a copy of `.env.example` file as `.env` and add environment variables accordingly and also create the database.
+Make a copy of `.env.example` file as `.env` and add environment variables accordingly.
 
-That's it.
 
 ## Getting Started
 
@@ -41,7 +41,7 @@ Open [http://localhost:3000/graphql](http://localhost:3000/graphql) with your br
 
 ## Running with Docker
 
-You can also run the database and redis services using Docker.
+For local development, run the database and redis services using Docker.
 
 ```bash
 docker-compose up --build
@@ -75,8 +75,8 @@ I have added the auth and user modules as one module to avoid circular-dependenc
 
 You need to import user module in every other module to be able to add authentication and authorization in that module.
 
-### Change Authorization in User Controller
-As you start there are only two roles in the app, which is why you might need to change the authorization rule defined in the user controller
+### Change Authorization in User Resolver
+As you start there are only two roles in the app, which is why you might need to change the authorization rule defined in the user resolver
 
 ## Troubleshoot
 - Incase you encounter a circular dependency error, then use `forwardRef` to get rid of that error, you can read more about `circular-dependency` and `forwardRef` [here](https://docs.nestjs.com/fundamentals/circular-dependency).

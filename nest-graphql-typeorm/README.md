@@ -6,22 +6,22 @@ Starter App for `Nest.js`, where the `User` and `Auth` Modules are already added
 
 - JWT Authentication
 - Passport.js
-- Graphql
+- Roles Authorization
 - Apollo Graphql
 - Twilio
 - Typeorm
 - Typeorm Database Seeding
 - Postgress
 - Class Validator package for input validation
-- AWS ( S3 and SES )
-- Redis
 - Class-Transform
+- AWS S3
+- AWS SES (Simple Email Service)
+- Redis
 
 ## Before you start
 
-Make a copy of `.env.example` file as `.env` and add environment variables accordingly.
+Make a copy of `.env.example` file as `.env` and add environment variables accordingly and also create the database.
 
-That's it.
 
 ## Getting Started
 
@@ -41,11 +41,12 @@ Open [http://localhost:3000/graphql](http://localhost:3000/graphql) with your br
 
 ## Running with Docker
 
-You can also run the database and redis services using Docker.
+For local development, run the database and redis services using Docker.
 
 ```bash
 docker-compose up --build
 ```
+
 To stop and remove containers created by docker-compose, you can use the following command:
 
 ```bash
@@ -61,18 +62,18 @@ docker-compose down
 ### To run migration please type
 
 ```bash
-npm run typeorm:generate --name=MigrationName 
+npm run typeorm:generate --name=MigrationName
 ```
 
-- Now update user and role seeders data `src/users/seeds/seed-data.ts` according to your entity type and then run the following command 
+- Now update user and role seeders data `src/users/seeds/seed-data.ts` according to your entity type and then run the following command
 
 ### Data Seeding
+
 To seed data for local development, seeders logic is located in `seeders/module-name.seeder.ts`
 
 ```bash
 npm run seeds
 ```
-
 
 ### NOTE
 
@@ -82,10 +83,12 @@ I have added the auth and user modules as one module to avoid circular-dependenc
 
 You need to import user module in every other module to be able to add authenticate and authorization in that module.
 
-### Change Authorization in User Controller
-As you start there are only two roles in the app, which is why you might need to change the authorization rule defined in the user controller
+### Change Authorization in User Resolver
+
+As you start there are only two roles in the app, which is why you might need to change the authorization rule defined in the user resolver.
 
 ## Troubleshoot
+
 - Incase you encounter a circular dependency error, then use `forwardRef` to get rid of that error, you can read more about `circular-dependency` and `forwardRef` [here](https://docs.nestjs.com/fundamentals/circular-dependency).
 
 Enjoy Coding!

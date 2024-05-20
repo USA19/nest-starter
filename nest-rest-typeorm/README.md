@@ -6,21 +6,23 @@ Starter App for `Nest.js`, where the `User` and `Auth` Modules are already added
 
 - JWT Authentication
 - Passport.js
-- Swegger
+- Roles Authorization
+- Swagger
 - Twilio
 - Typeorm
 - Typeorm Database Seeding
 - Postgress
 - Class Validator package for input validation
-- AWS ( S3 and SES )
-- Redis
 - Class-Transform
+- AWS S3
+- AWS SES (Simple Email Service)
+- Redis
+
 
 ## Before you start
 
 Make a copy of `.env.example` file as `.env` and add environment variables accordingly and also create the database.
 
-That's it.
 
 ## Getting Started
 
@@ -40,7 +42,7 @@ Open [http://localhost:3000/docs](http://localhost:3000/docs) with your browser 
 
 ## Running with Docker
 
-You can also run the database and redis services using Docker.
+For local development, run the database and redis services using Docker.
 
 ```bash
 docker-compose up --build
