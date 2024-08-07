@@ -1,0 +1,54 @@
+// npm run migration:generate --name=init
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  DEACTIVATED
+  ACTIVE
+}
+
+model Role {
+  id    String     @default(uuid()) @id
+  role  UserRole
+  userRole UserOnRole[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id    String     @default(uuid()) @id
+  email String  @unique
+  firstName  String?
+  lastName  String?
+  userRole UserOnRole[]
+  emailVerified Boolean? @default(false)
+  password String?
+  status UserStatus @default(DEACTIVATED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  phoneNumber String?
+}
+
+model UserOnRole {
+  id    String     @default(uuid()) @id
+  userId String
+  roleId String
+  user   User      @relation(fields: [userId], references: [id])
+  role   Role      @relation(fields: [roleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, roleId])
+}
