@@ -20,7 +20,10 @@ This repository contains a variety of starter packages tailored for different us
   REST APIs with Nest.js and TypeORM, combining the power of Nest.js with TypeORM's SQL database support for a seamless experience.
 
 - ### nest-rest-prisma:
-  REST APIs with Nest.js and Prisma, featuring seamless integration with Prisma.
+  RESTful APIs built with Nest.js and Prisma, optimized for modern database workflows and featuring seamless Prisma integration for a smooth development experience.
+
+- ### nest-rest-graphql:
+  A combination of GraphQL and Nest.js, enhanced by Prisma's capabilities, offering an efficient and scalable solution for API development.
 
 Each package comes equipped with pre-configured user authentication and authorization modules. Leveraging AWS services such as SES (Simple Email Service) and S3 (Simple Storage Service), Sendgrid along with Twilio for messaging and Redis for caching.
 
